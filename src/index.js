@@ -1,13 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { Audio } from 'react-loader-spinner'
+
+import { UserProvider } from './context/UserContext';
+// import Users from './components/Users/Users';
+// import Login from './components/Login/Login';
+// import Register from './components/Register/Register';
+// import NotFound from './components/NotFound/NotFound';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <UserProvider>
+        <App />
+
+      </UserProvider>
+
+    </BrowserRouter>
+
   </React.StrictMode>
 );
 
