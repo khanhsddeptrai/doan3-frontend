@@ -27,4 +27,25 @@ body {
     }
 }
 
+.nav-header {
+    .bg-header {
+        background: rgb(231, 231, 231);
+    }
+
+    a,
+    nav-link {
+        color: #000000 !important;
+
+        &:hover {
+            color: rgb(25 117 220) !important;
+        }
+    }
+
+    .nav-link {
+        &.active {
+            color: rgb(25 117 220) !important;
+        }
+    }
+}
+
 /* Change the link color to #111 (black) on hover */

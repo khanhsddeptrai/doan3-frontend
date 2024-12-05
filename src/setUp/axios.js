@@ -31,7 +31,8 @@ instance.interceptors.response.use(function (response) {
     const status = error && error.response && error.response.status || 500;
     switch (status) {
         case 401:
-            return toast.error("Unauthorized the user. Please login");
+            console.log(error.response.data)
+            return error.response.data
 
         case 403:
             return toast.error("You don't have permisson to access this resource");

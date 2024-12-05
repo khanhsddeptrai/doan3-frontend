@@ -1,24 +1,23 @@
 import { useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const PrivateRoutes = (props) => {
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
-    let history = useNavigate();
     useEffect(() => {
         if (!user || user.isAuthenticated !== true) {
-            history("/login")
+            navigate("/login");
         }
+    }, [user, navigate]);
 
-    }, [user, history])
     if (user && user.isAuthenticated === true) {
-        return (
-            props.children
-        );
+        // Render children nếu có, hoặc Outlet nếu nested routes
+        return props.children || <Outlet />;
     }
 
-
+    return null; // Trong trường hợp user chưa xác thực
 };
 
 export default PrivateRoutes;

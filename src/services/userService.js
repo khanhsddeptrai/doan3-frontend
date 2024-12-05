@@ -30,10 +30,24 @@ const updateCurrentUser = (dataUser) => {
 
 const getUserAccount = () => {
     return axios.get(`/api/account`);
+}
+
+const fetchAllDoctor = () => {
+    return axios.get(`/api/doctor/read`);
+
+}
+
+const fetchDoctor = (id) => {
+    return axios.get(`/api/doctor/read/${id}`);
+
+}
+
+const fetchBooking = (id) => {
+    return axios.get(`/api/booking/read/${id}`);
 
 }
 
 export {
     registerNewUser, loginUser, fetchAllUser, deleteUser,
-    createNewUser, updateCurrentUser, getUserAccount
+    createNewUser, updateCurrentUser, getUserAccount, fetchAllDoctor, fetchDoctor
 }

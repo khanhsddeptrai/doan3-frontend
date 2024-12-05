@@ -62,10 +62,10 @@ const Login = (props) => {
                 <div className="row px-4">
                     <div className="contain-left col-12 d-none col-sm-7 d-sm-block">
                         <div className='title'>
-                            FaceBook
+
                         </div>
                         <div className='detail'>
-                            FaceBook helps you connect and share with people in your life.
+
                         </div>
                     </div>
                     <div className="contain-right col-12 col-sm-5 d-flex flex-column gap-3 py-3 ">
