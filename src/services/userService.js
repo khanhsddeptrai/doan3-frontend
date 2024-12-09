@@ -42,12 +42,13 @@ const fetchDoctor = (id) => {
 
 }
 
-const fetchBooking = (id) => {
-    return axios.get(`/api/booking/read/${id}`);
+const fetchBooking = (dataBooking) => {
+    return axios.post(`/api/booking/create`, { ...dataBooking });
 
 }
 
 export {
     registerNewUser, loginUser, fetchAllUser, deleteUser,
-    createNewUser, updateCurrentUser, getUserAccount, fetchAllDoctor, fetchDoctor
+    createNewUser, updateCurrentUser, getUserAccount, fetchAllDoctor,
+    fetchDoctor, fetchBooking
 }

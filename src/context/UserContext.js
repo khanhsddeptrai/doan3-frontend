@@ -29,11 +29,12 @@ const UserProvider = ({ children }) => {
             let email = respone.DT.email;
             let name = respone.DT.name;
             let token = respone.DT.token;
+            let id = respone.DT.id;
             let data = {
                 isLoading: false,
                 isAuthenticated: true,
                 token: token,
-                account: { email, name }
+                account: { email, name, id }
             }
             setUser(data);
         } else {
