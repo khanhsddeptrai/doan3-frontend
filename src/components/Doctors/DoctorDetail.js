@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchDoctor } from "../../services/userService";
+import { fetchDoctor } from "../../services/doctorService";
 
 const DoctorDetail = () => {
     const { id } = useParams();

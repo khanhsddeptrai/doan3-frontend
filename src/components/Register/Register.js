@@ -1,38 +1,38 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import './Register.scss'
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
-import { registerNewUser } from '../../services/userService';
+import { registerNewUser } from '../../services/userService'
 
 const Register = (props) => {
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
 
     const isValidInputs = () => {
         if (!email) {
-            toast.error("Email is required !");
-            return false;
+            toast.error("Email is required !")
+            return false
         }
         if (!phone) {
-            toast.error("Phone is required !");
-            return false;
+            toast.error("Phone is required !")
+            return false
         }
         if (!password) {
-            toast.error("Password is required !");
-            return false;
+            toast.error("Password is required !")
+            return false
         }
         if (password !== confirmPassword) {
-            toast.error("Password is not same !");
-            return false;
+            toast.error("Password is not same !")
+            return false
         }
 
-        let regx = /\S+@\S+\.\S+/;
+        let regx = /\S+@\S+\.\S+/
         if (!regx.test(email)) {
-            toast.error("Email is invalid!");
+            toast.error("Email is invalid!")
             return false
         }
         return true
@@ -46,7 +46,7 @@ const Register = (props) => {
     const handleRegister = async () => {
         const check = isValidInputs()
         if (check) {
-            let respone = await registerNewUser(email, phone, username, password);
+            let respone = await registerNewUser(email, phone, name, password)
 
 
             if (+respone.EC === 0) {
@@ -73,59 +73,63 @@ const Register = (props) => {
                 <div className="row px-4">
                     <div className="contain-left col-12 d-none col-sm-7 d-sm-block">
                         <div className='title'>
-                            FaceBook
+                            QuickCare
                         </div>
                         <div className='detail'>
-                            FaceBook helps you connect and share with people in your life.
+                            QuickCare chăm sóc và hỗ trợ sức khỏe của ĐÓM
                         </div>
                     </div>
                     <div className="contain-right col-12 col-sm-5 d-flex flex-column gap-3 py-3 ">
                         <div className='title d-sm-none'>
-                            FaceBook
+                            QuickCare
                         </div>
+
                         <div className='form-group'>
-                            <label>Email: </label>
-                            <input value={email} name='email' type='text' className='form-control'
+                            <label>Email (<span className='text-danger'>*</span>): </label>
+                            <input value={email} name='email' type='email' className='form-control'
                                 onChange={(event) => { setEmail(event.target.value) }}
                             />
                         </div>
                         <div className='form-group'>
-                            <label>Phone number: </label>
+                            <label>Điện thoại (<span className='text-danger'>*</span>): </label>
                             <input name='phone' type='text' className='form-control'
                                 value={phone}
                                 onChange={(event) => { setPhone(event.target.value) }}
                             />
                         </div>
                         <div className='form-group'>
-                            <label>User name: </label>
-                            <input name='username' type='text' className='form-control'
-                                value={username}
-                                onChange={(event) => { setUsername(event.target.value) }}
+                            <label>Họ và tên (<span className='text-danger'>*</span>): </label>
+                            <input name='name' type='text' className='form-control'
+                                value={name}
+                                onChange={(event) => { setName(event.target.value) }}
                             />
                         </div>
                         <div className='form-group'>
-                            <label>Password: </label>
+                            <label>Mật khẩu (<span className='text-danger'>*</span>): </label>
                             <input name='password' type='password' className='form-control'
                                 value={password}
                                 onChange={(event) => { setPassword(event.target.value) }}
+                                placeholder="Mật khẩu phải có ít nhất 8 ký tự trong đó có chữ thường và số"
                             />
                         </div>
                         <div className='form-group'>
-                            <label>Re-enter Password: </label>
+                            <label>Nhập lại mật khẩu (<span className='text-danger'>*</span>): </label>
                             <input name='re-password' type='password' className='form-control'
                                 value={confirmPassword}
                                 onChange={(event) => { setConfirmPassword(event.target.value) }}
                             />
                         </div>
 
-                        <button onClick={() => { handleRegister() }} type='password' className='btn btn-primary'>
-                            Register
-                        </button>
+                        <div className='mt-3 d-flex justify-content-center'>
+                            <button onClick={() => { handleRegister() }} type='password' className='btn btn-primary w-50'>
+                                Đăng ký
+                            </button>
+                        </div>
                         <hr />
                         <div className='text-center'>
-                            <button onClick={() => handleLogin()} className='btn btn-success'>
-                                Already've an account. Login
-                            </button>
+                            <a href='#' className='forgot-password' onClick={() => handleLogin()}>
+                                Bạn đã có tài khoản? Đăng nhập.
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -133,4 +137,4 @@ const Register = (props) => {
         </div>
     )
 }
-export default Register;
+export default Register

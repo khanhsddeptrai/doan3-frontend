@@ -1,19 +1,19 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react'
 import './Login.scss'
-//import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+//import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import { loginUser } from '../../services/userService';
-import { UserContext } from '../../context/UserContext';
+import { loginUser } from '../../services/userService'
+import { UserContext } from '../../context/UserContext'
 
 const Login = (props) => {
-    const { loginContext } = useContext(UserContext);
+    const { loginContext } = useContext(UserContext)
 
-    let history = useNavigate();
+    let history = useNavigate()
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     const HandleCreateNewAccount = () => {
         history('/register')
@@ -21,29 +21,32 @@ const Login = (props) => {
 
     const handleLogin = async () => {
         if (!email) {
-            toast.error("Please enter your email address!");
-            return;
+            toast.error("Vui lòng nhập Email của bạn!")
+            return
         }
         if (!password) {
-            toast.error("Please enter your password!");
-            return;
+            toast.error("Vui lòng nhập mật khẩu!")
+            return
         }
 
-        let respone = await loginUser(email, password);
+        let respone = await loginUser(email, password)
+        // console.log("check user loggggin ", respone)
         if (+respone.EC === 0) {
-            let email = respone.DT.email;
-            let name = respone.DT.name;
-            let token = respone.DT.access_token;
-            let userType = respone.DT.userType;
+            let email = respone.DT.email
+            let name = respone.DT.name
+            let token = respone.DT.access_token
+            let userType = respone.DT.userType
+            let id = respone.DT.patientId
             let data = {
                 isAuthenticated: true,
                 token: token,
-                account: { email, name, userType }
+                account: { email, name, userType, id }
             }
+            // console.log("check data login: ", data)
+            // sessionStorage.setItem('userData', JSON.stringify(data));
             loginContext(data)
-            toast.success(respone.EM);
-            history("/users");
-            // window.location.reload();
+            toast.success(respone.EM)
+            history("/users")
 
         } else {
             toast.error(respone.EM)
@@ -73,26 +76,28 @@ const Login = (props) => {
                             FaceBook
                         </div>
                         <input
-                            value={email} type='text' className='form-control' placeholder='Enter your Email'
+                            value={email} type='email' className='form-control' placeholder='Nhập tài khoản của bạn'
                             onChange={(event) => { setEmail(event.target.value) }}
                             onKeyUp={(event) => { handlePressEnter(event) }}
                         />
                         <input
-                            value={password} type='password' className='form-control' placeholder='Enter your Password'
+                            value={password} type='password' className='form-control' placeholder='Nhập mật khẩu'
                             onChange={(event) => { setPassword(event.target.value) }}
                             onKeyUp={(event) => { handlePressEnter(event) }}
                         />
-                        <button onClick={() => { handleLogin() }} type='password' className='btn btn-primary'
 
-                        >
-                            Login
-                        </button>
-                        <span className='text-center'><a href='#' className='forgot-password'>Forgot your password?</a></span>
+                        <div className='mt-3 d-flex justify-content-center'>
+                            <button onClick={() => { handleLogin() }} type='password' className='btn btn-primary w-50'>
+                                Đăng nhập
+                            </button>
+                        </div>
+
+                        <span className='text-center'><a href='#' className='forgot-password'>Quên mật khẩu?</a></span>
                         <hr />
                         <div className='text-center'>
-                            <button onClick={() => HandleCreateNewAccount()} className='btn btn-success'>
-                                Create new account
-                            </button>
+                            <a href='#' onClick={() => HandleCreateNewAccount()} className='forgot-password'>
+                                Bạn chưa có tài khoản? Đăng ký
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -100,4 +105,4 @@ const Login = (props) => {
         </div>
     )
 }
-export default Login;
+export default Login

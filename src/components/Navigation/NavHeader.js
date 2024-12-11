@@ -32,6 +32,8 @@ const NavHeader = (props) => {
                                     <NavLink to="doctors" className='nav-link'>Bác sĩ</NavLink>
                                     <NavLink to="contact" className='nav-link'>Phòng khám</NavLink>
                                     <NavLink to="about" className='nav-link'>Cơ sở y tế</NavLink>
+                                    <NavLink to="bookings" className='nav-link'>Lịch hẹn</NavLink>
+
 
                                 </Nav>
                                 <Nav>

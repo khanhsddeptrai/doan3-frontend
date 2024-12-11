@@ -1,64 +1,71 @@
-import { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import { toast } from "react-toastify";
+import { useEffect, useState, useContext } from "react"
+import { Modal } from "react-bootstrap"
+import Button from "react-bootstrap/Button"
+import { toast } from "react-toastify"
 
-import { fetchBooking } from "../../services/userService";
+import { fetchBooking } from "../../services/bookingService"
+import { UserContext } from "../../context/UserContext";
 
 const ModalDoctor = (props) => {
-    const { dataDoctor } = props;
+    const { dataDoctor } = props
+    const { user } = useContext(UserContext);
 
-    const [selectedDate, setSelectedDate] = useState(""); // Lưu ngày khám được chọn
-    const [filteredSchedules, setFilteredSchedules] = useState([]); // Lưu lịch khám được lọc
-    const [errorMessage, setErrorMessage] = useState(""); // Thông báo lỗi
+    const [selectedDate, setSelectedDate] = useState("") // Lưu ngày khám được chọn
+    const [filteredSchedules, setFilteredSchedules] = useState([]) // Lưu lịch khám được lọc
+    const [errorMessage, setErrorMessage] = useState("") // Thông báo lỗi
 
-    const [selectedTimeslot, setSelectedTimeslot] = useState("");
+    // const [selectedTimeslot, setSelectedTimeslot] = useState("")
+    const [selectedScheduleId, setSelectedScheduleId] = useState(); // Lưu scheduleId được chọn
+
 
 
     useEffect(() => {
-        console.log("check user: ", props.user)
+        console.log("check user::: ", user)
         // Lọc danh sách lịch khám dựa trên ngày
         if (selectedDate && dataDoctor && dataDoctor.Schedules) {
-            const filtered = dataDoctor.Schedules.filter(schedule => schedule.date === selectedDate);
-            setFilteredSchedules(filtered);
+            const filtered = dataDoctor.Schedules.filter(schedule => schedule.date === selectedDate)
+            setFilteredSchedules(filtered)
         } else {
-            setFilteredSchedules([]);
+            setFilteredSchedules([])
         }
-    }, [selectedDate, dataDoctor]);
+    }, [selectedDate, dataDoctor])
+
 
     const handleDateChange = (event) => {
-        const selected = event.target.value; // Lấy ngày được chọn từ input
-        const today = new Date(); // Ngày hiện tại
-        const selectedDate = new Date(selected); // Ngày được chọn
+        const selected = event.target.value // Lấy ngày được chọn từ input
+        const today = new Date() // Ngày hiện tại
+        const selectedDate = new Date(selected) // Ngày được chọn
 
         // Kiểm tra ngày có lớn hơn hoặc bằng ngày hiện tại không
         if (selectedDate.setHours(0, 0, 0, 0) >= today.setHours(0, 0, 0, 0)) {
-            setSelectedDate(selected);
-            setErrorMessage(""); // Xóa thông báo lỗi nếu ngày hợp lệ
+            setSelectedDate(selected)
+            setErrorMessage("") // Xóa thông báo lỗi nếu ngày hợp lệ
         } else {
-            setSelectedDate(""); // Reset ngày nếu không hợp lệ
-            setErrorMessage("Ngày khám phải lớn hơn hoặc bằng ngày hiện tại.");
+            setSelectedDate("") // Reset ngày nếu không hợp lệ
+            setErrorMessage("Ngày khám phải lớn hơn hoặc bằng ngày hiện tại.")
         }
-    };
+    }
 
     const handleCloseModal = () => {
-        setSelectedDate("");
-        props.handleCloseModal();
+        setSelectedDate("")
+        props.handleCloseModal()
     }
 
     const handleSubmit = async () => {
         const bookingData = {
             date: selectedDate,
-            patientId: props.user.id
-        };
-        let response = await fetchBooking(bookingData);
-        if (response && response.EC === 0) {
-            toast.success(response.EM);
-            handleCloseModal();
-        } else {
-            toast.error(response.EM);
+            patientId: user.account.id,
+            scheduleId: selectedScheduleId
         }
-    };
+        console.log(bookingData)
+        let response = await fetchBooking(bookingData)
+        if (response && response.EC === 0) {
+            toast.success(response.EM)
+            handleCloseModal()
+        } else {
+            toast.error(response.EM)
+        }
+    }
 
 
     return (
@@ -97,26 +104,32 @@ const ModalDoctor = (props) => {
 
                         <div className="col-12 col-sm-6 form-group">
                             <label>Giờ khám: (<span className="text-danger">*</span>):</label>
-                            <select className="form-select" disabled={!selectedDate}>
+                            <select
+                                className="form-select"
+                                disabled={!selectedDate || filteredSchedules.length === 0} // Vô hiệu hóa nếu không có ngày hoặc giờ khám
+                                onChange={(event) => setSelectedScheduleId(event.target.value)}
+                                value={selectedScheduleId || ""} // Giá trị mặc định là rỗng khi chưa chọn
+                            >
+                                {/* Tùy chọn mặc định */}
+                                <option value="">Chọn giờ khám</option>
+
                                 {selectedDate ? (
                                     filteredSchedules.length > 0 ? (
-                                        filteredSchedules.map(schedule =>
-                                            schedule.Timeslot ? (
-                                                <option
-                                                    key={schedule.Timeslot.timeSlotId}
-                                                    value={schedule.Timeslot.timeSlotId}
-                                                >
-                                                    {schedule.Timeslot.startTime} - {schedule.Timeslot.endTime} (Số lượng còn: {schedule.maxNumber - schedule.currentNumber})
-                                                </option>
-                                            ) : null
-                                        )
+                                        filteredSchedules.map(schedule => (
+                                            <option key={schedule.id} value={schedule.id}>
+                                                {schedule.Timeslot.startTime} - {schedule.Timeslot.endTime}
+                                                (Số lượng còn: {schedule.maxNumber - schedule.currentNumber})
+                                            </option>
+                                        ))
                                     ) : (
-                                        <option value="">Không có lịch khám khả dụng</option>
+                                        <option value="" disabled>Không có lịch khám khả dụng</option>
                                     )
                                 ) : (
-                                    <option value="">Vui lòng chọn giờ khám</option>
+                                    <option value="" disabled>Vui lòng chọn ngày khám trước</option>
                                 )}
                             </select>
+
+
                         </div>
 
                         <div className="col-12 col-sm-6 form-group">
@@ -166,7 +179,7 @@ const ModalDoctor = (props) => {
                 </Modal.Footer>
             </Modal>
         </>
-    );
-};
+    )
+}
 
-export default ModalDoctor;
+export default ModalDoctor

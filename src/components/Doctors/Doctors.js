@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchAllDoctor } from "../../services/userService";
+import { fetchAllDoctor } from "../../services/doctorService";
 import ModalDoctor from "./ModalDoctor";
 import { UserContext } from "../../context/UserContext";
 
@@ -99,7 +99,6 @@ const Doctors = (props) => {
                 show={isShowModalBooking}
                 handleCloseModal={handleCloseModalBooking}
                 dataDoctor={dataDoctor}
-                user={user}
             />
         </>
     );
