@@ -34,11 +34,14 @@ const UserProvider = ({ children }) => {
             let name = respone.DT.name
             let token = respone.DT.access_token
             let id = respone.DT.id
+            let doctorId = respone.DT.doctorId
+            let patientId = respone.DT.patientId
+
             let data = {
                 isLoading: false,
                 isAuthenticated: true,
                 token: token,
-                account: { email, name, id }
+                account: { email, name, id, doctorId, patientId }
             }
             setUser(data)
         } else {

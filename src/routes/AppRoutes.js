@@ -8,6 +8,7 @@ import NotFound from '../components/NotFound/NotFound';
 import Home from '../components/Home/Home';
 import Doctors from '../components/Doctors/Doctors';
 import DoctorDetail from '../components/Doctors/DoctorDetail';
+import Booking from '../components/Bookings/Bookings';
 import PrivateRoutes from './PrivateRoutes';
 
 const AppRoutes = () => {
@@ -22,6 +23,7 @@ const AppRoutes = () => {
                 <Route path="users" element={<Users />} />
                 <Route path="doctors" element={<Doctors />} />
                 <Route path="doctors/:id" element={<DoctorDetail />} />
+                <Route path="bookings" element={<Booking />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

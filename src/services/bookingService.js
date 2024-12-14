@@ -5,10 +5,9 @@ const fetchBooking = (dataBooking) => {
 
 }
 
-const fetchAllBooking = () => {
-    return axios.get(`/api/booking/read`)
+const fetchAllBooking = (doctorId) => {
+    return axios.get(`/api/booking/read/${doctorId}`)
 }
-// read?page=${page}&limit=${limit}
 
 export {
     fetchBooking, fetchAllBooking

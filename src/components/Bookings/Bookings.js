@@ -2,13 +2,25 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import { fetchAllBooking } from "../../services/bookingService";
+import { UserContext } from "../../context/UserContext";
 
-// import { UserContext } from "../../context/UserContext";
-
-const Users = (props) => {
+const Booking = (props) => {
+    const { user } = useContext(UserContext);
+    const [bookings, setBookings] = useState([])
 
     useEffect(() => {
-    }, [currentPage])
+        fetchBookingByDoctorId();
+    }, [])
+
+    const fetchBookingByDoctorId = async () => {
+        // console.log("check respone schedule:", user.account.doctorId);
+        let respone = await fetchAllBooking(user.account.doctorId);
+        console.log("check respone schedule:", respone);
+        if (respone && +respone.EC === 0) {
+            setBookings(respone.DT);
+        }
+    }
 
     return (
         <>
@@ -16,7 +28,7 @@ const Users = (props) => {
                 <div className="users-container">
                     <div className="user-header">
                         <div className="title">
-                            <h3>Table Users</h3>
+                            <h3>Lịch khám của tôi</h3>
                         </div>
                         <div className="action">
                             <button className="btn btn-success">Refresh</button>
@@ -31,22 +43,24 @@ const Users = (props) => {
                             <thead>
                                 <tr>
                                     <th scope="col">STT</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Actions</th>
+                                    <th scope="col">Họ tên</th>
+                                    <th scope="col">Điện thoại</th>
+                                    <th scope="col">Ngày khám</th>
+                                    <th scope="col">Giờ khám</th>
+                                    <th scope="col">Trạng thái</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {listUsers && listUsers.length > 0 ?
+                                {bookings && bookings.length > 0 ?
                                     <>
-                                        {listUsers.map((item, index) => {
+                                        {bookings.map((item, index) => {
                                             return (
                                                 <tr key={`row-${index}`}>
-                                                    <td>{(currentLimit * (currentPage - 1)) + (index + 1)}</td>
-                                                    <td>{item.User.email}</td>
-                                                    <td>{item.User.name}</td>
-                                                    <td>{item.User.phone}</td>
+                                                    <td>{(index + 1)}</td>
+                                                    <td>{item.Patient.User.name}</td>
+                                                    <td>{item.Patient.User.phone}</td>
+                                                    <td>{item.date}</td>
+                                                    <td>gio kham</td>
                                                     <th>
                                                         <button className="btn btn-warning mx-3"
                                                         // onClick={() => { handleEditUser(item) }}
@@ -77,34 +91,10 @@ const Users = (props) => {
                             </tbody>
                         </table>
                     </div>
-                    {totalPages > 0 &&
-                        <div className="user-footer">
-                            <ReactPaginate
-                                nextLabel="next >"
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={3}
-                                marginPagesDisplayed={4}
-                                pageCount={totalPages}
-                                previousLabel="< previous"
-                                pageClassName="page-item"
-                                pageLinkClassName="page-link"
-                                previousClassName="page-item"
-                                previousLinkClassName="page-link"
-                                nextClassName="page-item"
-                                nextLinkClassName="page-link"
-                                breakLabel="..."
-                                breakClassName="page-item"
-                                breakLinkClassName="page-link"
-                                containerClassName="pagination"
-                                activeClassName="active"
-                                renderOnZeroPageCount={null}
-                            />
-                        </div>
-                    }
                 </div>
             </div>
         </>
     )
 }
 
-export default Users;
+export default Booking;

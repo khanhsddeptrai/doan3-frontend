@@ -36,7 +36,8 @@ const Login = (props) => {
             let name = respone.DT.name
             let token = respone.DT.access_token
             let userType = respone.DT.userType
-            let id = respone.DT.patientId
+            let id = respone.DT.id
+            // let doctorId = respone.DT.userType
             let data = {
                 isAuthenticated: true,
                 token: token,
